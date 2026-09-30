@@ -1,0 +1,275 @@
+{% extends "base.html" %}
+
+{% block title %}{{ t.dashboard }} | SwachhMitra{% endblock %}
+
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+
+    <div>
+        <h2 class="text-success mb-1">
+            {{ t.dashboard }}
+        </h2>
+
+        <p class="text-muted mb-0">
+            {{ t.welcome }}, <strong>{{ current_user_name }}</strong>!
+        </p>
+    </div>
+<div class="text-center mb-4">
+    <a
+        href="{{ url_for('certificate') }}"
+        class="btn btn-outline-success btn-lg"
+    >
+        🏆 Certificate of Participation
+    </a>
+</div>
+    <a
+        href="{{ url_for('profile') }}"
+        class="btn btn-outline-success"
+    >
+        {{ t.my_profile }}
+    </a>
+
+</div>
+
+
+<div class="row g-4 mb-4">
+
+    <!-- REPORT GARBAGE -->
+
+    <div class="col-md-6">
+
+        <div class="card shadow-sm h-100">
+
+            <div class="card-body p-4">
+
+                <div class="fs-1 mb-2">📷</div>
+
+                <h3 class="h5">
+                    {{ t.report_garbage }}
+                </h3>
+
+                <p class="text-muted">
+                    {{ t.report_description }}
+                </p>
+
+                <a
+                    href="{{ url_for('report_waste') }}"
+                    class="btn btn-success"
+                >
+                    {{ t.report_garbage }}
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- MY PROFILE -->
+
+    <div class="col-md-6">
+
+        <div class="card shadow-sm h-100">
+
+            <div class="card-body p-4">
+
+                <div class="fs-1 mb-2">👤</div>
+
+                <h3 class="h5">
+                    {{ t.my_profile }}
+                </h3>
+
+                <p class="text-muted">
+                    {{ t.profile_description }}
+                </p>
+
+                <a
+                    href="{{ url_for('profile') }}"
+                    class="btn btn-outline-success"
+                >
+                    {{ t.view_profile }}
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- MY GARBAGE REPORTS -->
+
+<div class="card shadow-sm">
+
+    <div class="card-body p-4">
+
+        <h3 class="h5 text-success mb-3">
+            📋 {{ t.garbage_reports }}
+        </h3>
+
+
+        {% if reports %}
+
+        <div class="table-responsive">
+
+            <table class="table table-hover align-middle">
+
+                <thead>
+
+                    <tr>
+                        <th>{{ t.report_id }}</th>
+                        <th>{{ t.waste_type }}</th>
+                        <th>{{ t.location }}</th>
+                        <th>{{ t.status }}</th>
+                        <th>{{ t.date }}</th>
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    {% for report in reports %}
+
+                    <tr>
+
+                        <td>
+                            <strong>
+                                {{ report['report_code'] }}
+                            </strong>
+                        </td>
+
+
+                        <td>
+                            {% set waste = report['waste_type'] %}
+
+                            {% if waste == 'Dry Waste' %}
+                                {{ t.dry_waste }}
+
+                            {% elif waste == 'Wet Waste' %}
+                                {{ t.wet_waste }}
+
+                            {% elif waste == 'Plastic Waste' %}
+                                {{ t.plastic_waste }}
+
+                            {% elif waste == 'E-Waste' %}
+                                {{ t.e_waste }}
+
+                            {% elif waste == 'Construction' %}
+                                {{ t.construction }}
+
+                            {% elif waste == 'Medical' %}
+                                {{ t.medical }}
+
+                            {% elif waste == 'Mixed Waste' %}
+                                {{ t.mixed_waste }}
+
+                            {% else %}
+                                {{ t.other }}
+                            {% endif %}
+                        </td>
+
+
+                        <td>
+                            {% if report['address'] %}
+                                {{ report['address'] }}
+                            {% else %}
+                                {{ t.not_provided }}
+                            {% endif %}
+                        </td>
+
+
+                        <td>
+
+                            {% if report['status'] == 'Reported' %}
+
+                                <span class="badge text-bg-primary">
+                                    {{ t.reported }}
+                                </span>
+
+                            {% elif report['status'] == 'Verified' %}
+
+                                <span class="badge text-bg-info">
+                                    {{ t.verified }}
+                                </span>
+
+                            {% elif report['status'] == 'Assigned' %}
+
+                                <span class="badge text-bg-warning">
+                                    {{ t.assigned }}
+                                </span>
+
+                            {% elif report['status'] == 'Cleaning in Progress' %}
+
+                                <span class="badge text-bg-warning">
+                                    {{ t.cleaning_in_progress }}
+                                </span>
+
+                            {% elif report['status'] == 'Cleaned' %}
+
+                                <span class="badge text-bg-success">
+                                    {{ t.cleaned }}
+                                </span>
+
+                            {% elif report['status'] == 'Closed' %}
+
+                                <span class="badge text-bg-secondary">
+                                    {{ t.closed }}
+                                </span>
+
+                            {% else %}
+
+                                <span class="badge text-bg-secondary">
+                                    {{ report['status'] }}
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+
+                        <td>
+                            {{ report['created_at'] | ist_datetime }}
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+
+        {% else %}
+
+        <div class="text-center py-4">
+
+            <div class="fs-1">🗑️</div>
+
+            <p class="text-muted mb-3">
+                {{ t.no_reports }}
+            </p>
+
+            <a
+                href="{{ url_for('report_waste') }}"
+                class="btn btn-success"
+            >
+                {{ t.first_report }}
+            </a>
+
+        </div>
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+{% endblock %}

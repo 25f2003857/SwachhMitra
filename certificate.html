@@ -1,0 +1,185 @@
+{% extends "base.html" %}
+
+{% block title %}Certificate | {{ t.SwachhMitra }}{% endblock %}
+
+{% block content %}
+
+<div class="text-center mb-3 no-print">
+    <button
+        onclick="window.print()"
+        class="btn btn-success btn-lg"
+    >
+        🖨️ Print / Save as PDF
+    </button>
+</div>
+
+<div class="certificate">
+
+    <div class="certificate-border">
+
+        <div class="certificate-content">
+
+            <h1 class="certificate-title">
+                CERTIFICATE
+            </h1>
+
+            <h2 class="certificate-subtitle">
+                OF PARTICIPATION
+            </h2>
+
+            <p class="certificate-text">
+                This certificate is proudly presented to
+            </p>
+
+            <h2 class="participant-name">
+                {{ user['full_name'] }}
+            </h2>
+
+            <p class="certificate-text">
+                for participating in
+            </p>
+
+            <h2 class="project-name">
+                {{ t.SwachhMitra }}
+            </h2>
+
+            <p class="certificate-text">
+                Community Waste Management Initiative
+            </p>
+
+            <p class="certificate-description">
+                Your participation contributes to creating cleaner,
+                healthier and more responsible communities.
+            </p>
+
+            <div class="certificate-footer">
+
+                <div>
+                    <strong>College CEP Project</strong>
+                </div>
+
+                <div>
+                    <strong>Date</strong><br>
+                    {{ current_date }}
+                </div>
+
+                <div>
+                    <strong>{{ t.SwachhMitra }}</strong><br>
+                    Community Initiative
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<style>
+
+.certificate {
+    background: white;
+    padding: 25px;
+    max-width: 1000px;
+    margin: auto;
+}
+
+.certificate-border {
+    border: 12px double #198754;
+    padding: 12px;
+}
+
+.certificate-content {
+    border: 2px solid #198754;
+    padding: 70px 60px;
+    text-align: center;
+    min-height: 600px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.certificate-title {
+    font-size: 48px;
+    font-weight: 700;
+    letter-spacing: 5px;
+    color: #198754;
+    margin-bottom: 5px;
+}
+
+.certificate-subtitle {
+    font-size: 25px;
+    letter-spacing: 4px;
+    margin-bottom: 45px;
+}
+
+.certificate-text {
+    font-size: 20px;
+    margin: 8px;
+}
+
+.participant-name {
+    font-size: 38px;
+    color: #198754;
+    border-bottom: 2px solid #198754;
+    display: inline-block;
+    padding: 0 35px 8px;
+    margin: 15px auto;
+}
+
+.project-name {
+    font-size: 30px;
+    color: #198754;
+    margin: 12px;
+}
+
+.certificate-description {
+    font-size: 17px;
+    max-width: 650px;
+    margin: 25px auto 45px;
+}
+
+.certificate-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+    font-size: 15px;
+    margin-top: auto;
+}
+
+@media print {
+
+    body {
+        background: white !important;
+    }
+
+    .no-print,
+    nav,
+    footer {
+        display: none !important;
+    }
+
+    .certificate {
+        padding: 0;
+        max-width: none;
+    }
+
+    .certificate-border {
+        border: 12px double #198754;
+    }
+
+    .certificate-content {
+        min-height: 600px;
+    }
+
+    @page {
+        size: A4 landscape;
+        margin: 0.3in;
+    }
+
+}
+
+</style>
+
+{% endblock %}

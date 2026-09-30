@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block title %}{{ t.home }} | {{ t.SwachhMitra }}{% endblock %}
+
+{% block content %}
+
+<div class="p-5 mb-4 bg-white rounded-3 shadow-sm">
+
+<div class="container-fluid py-3">
+
+    <h1 class="display-5 fw-bold text-success">
+        {{ t.SwachhMitra }}
+    </h1>
+
+    <p class="col-md-8 fs-5">
+        {{ t.home_description }}
+        {{ t.home_features }}
+    </p>
+
+
+    {% if not is_logged_in %}
+
+        <a
+            class="btn btn-success btn-lg me-2"
+            href="{{ url_for('register') }}"
+        >
+            {{ t.create_account }}
+        </a>
+
+        <a
+            class="btn btn-outline-success btn-lg"
+            href="{{ url_for('login') }}"
+        >
+            {{ t.user_login }}
+        </a>
+
+
+    {% else %}
+
+        {% if current_user_role == 'admin' %}
+
+            <a
+                class="btn btn-success btn-lg"
+                href="{{ url_for('admin_dashboard') }}"
+            >
+                {{ t.go_to_admin_dashboard }}
+            </a>
+
+        {% else %}
+
+            <a
+                class="btn btn-success btn-lg"
+                href="{{ url_for('user_dashboard') }}"
+            >
+                {{ t.go_to_dashboard }}
+            </a>
+
+        {% endif %}
+
+    {% endif %}
+
+</div>
+
+</div>
+
+{% endblock %}
