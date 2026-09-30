@@ -18,7 +18,12 @@ from werkzeug.security import check_password_hash, generate_password_hash
 from werkzeug.utils import secure_filename
 
 from PIL import Image
-from transformers import pipeline
+import os
+
+if os.environ.get("RENDER"):
+    pipeline = None
+else:
+    from transformers import pipeline
 
 
 app = Flask(__name__)
@@ -55,10 +60,13 @@ app.config["MAX_CONTENT_LENGTH"] = 5 * 1024 * 1024
 # ---------------------------------------------------------
 # AI WASTE CLASSIFIER
 # ---------------------------------------------------------
-waste_classifier = pipeline(
-    "image-classification",
-    model="yangy50/garbage-classification",
-)
+if os.environ.get("RENDER"):
+    classifier = None
+else:
+    classifier = pipeline(
+        "image-classification",
+        model="yangy50/garbage-classification"
+    )
 
 
 # ---------------------------------------------------------
