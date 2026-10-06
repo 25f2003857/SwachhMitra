@@ -1,0 +1,132 @@
+{% extends "base.html" %}
+
+{% block title %}Add Dustbin - {{ t.SwachhMitra }}{% endblock %}
+
+{% block content %}
+
+<div class="container py-4">
+
+    <div class="card p-4 mx-auto" style="max-width: 700px;">
+
+        <h2 class="mb-4">
+            🗑️ Add Dustbin Location
+        </h2>
+
+        <form method="POST">
+
+            <div class="mb-3">
+                <label class="form-label">Dustbin Name</label>
+                <input
+                    type="text"
+                    name="name"
+                    class="form-control"
+                    placeholder="Example: Pimpri Market Dustbin"
+                    required
+                >
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">
+                    Address / Locality
+                </label>
+                <input
+                    type="text"
+                    name="address"
+                    class="form-control"
+                    placeholder="Example: Pimpri Market, Pune"
+                >
+            </div>
+
+            <div class="row">
+
+                <div class="col-md-6 mb-3">
+
+                    <label class="form-label">
+                        Latitude
+                    </label>
+
+                    <input
+                        type="number"
+                        name="latitude"
+                        class="form-control"
+                        step="any"
+                        placeholder="18.6298"
+                        required
+                    >
+
+                </div>
+
+                <div class="col-md-6 mb-3">
+
+                    <label class="form-label">
+                        Longitude
+                    </label>
+
+                    <input
+                        type="number"
+                        name="longitude"
+                        class="form-control"
+                        step="any"
+                        placeholder="73.7997"
+                        required
+                    >
+
+                </div>
+
+            </div>
+
+            <div class="mb-3">
+
+                <label class="form-label">
+                    Accepted Waste
+                </label>
+
+                <input
+                    type="text"
+                    name="accepted_waste"
+                    class="form-control"
+                    placeholder="Example: Dry Waste, Plastic"
+                >
+
+            </div>
+
+            <div class="mb-3">
+
+                <label class="form-label">
+                    Description
+                </label>
+
+                <textarea
+                    name="description"
+                    class="form-control"
+                    rows="3"
+                    placeholder="Additional information about this dustbin..."
+                ></textarea>
+
+            </div>
+
+            <div class="d-flex gap-2">
+
+                <button
+                    type="submit"
+                    class="btn btn-success"
+                >
+                    ➕ Add Dustbin
+                </button>
+
+                <a
+                    href="{{ url_for('dustbins') }}"
+                    class="btn btn-secondary"
+                >
+                    Cancel
+                </a>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+{% endblock %}
