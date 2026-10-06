@@ -145,6 +145,44 @@
                 </div>
 
 
+                <!-- MAP -->
+
+                <div class="mb-3">
+
+                    <label class="form-label">
+                        📍 Select Garbage Location on Map
+                    </label>
+
+                    <div class="form-text mb-2">
+                        Click on the map to select the garbage location,
+                        or use your current location.
+                    </div>
+
+                    <div
+                        id="reportMap"
+                        style="
+                            height: 400px;
+                            width: 100%;
+                            border-radius: 12px;
+                            border: 1px solid #ddd;
+                        "
+                    ></div>
+
+                    <div class="d-grid mt-2">
+
+                        <button
+                            type="button"
+                            class="btn btn-outline-success"
+                            id="locateMeBtn"
+                        >
+                            📍 Use My Current Location
+                        </button>
+
+                    </div>
+
+                </div>
+
+
                 <!-- COORDINATES -->
 
                 <div class="row">
@@ -161,6 +199,7 @@
                             id="latitude"
                             name="latitude"
                             placeholder="{{ t.optional }}"
+                            readonly
                         >
 
                     </div>
@@ -178,6 +217,7 @@
                             id="longitude"
                             name="longitude"
                             placeholder="{{ t.optional }}"
+                            readonly
                         >
 
                     </div>
@@ -238,5 +278,204 @@
 </div>
 
 </div>
+
+
+<!-- LEAFLET -->
+
+<link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+/>
+
+<script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+></script>
+
+
+<script>
+
+    /*
+     * Default map centre:
+     * Pimpri-Chinchwad area
+     */
+
+    const defaultLatitude = 18.6298;
+    const defaultLongitude = 73.7997;
+
+
+    const map = L.map("reportMap").setView(
+        [defaultLatitude, defaultLongitude],
+        14
+    );
+
+
+    /*
+     * OpenStreetMap tiles
+     */
+
+    L.tileLayer(
+        "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+        {
+            maxZoom: 19,
+            attribution:
+                "&copy; OpenStreetMap contributors"
+        }
+    ).addTo(map);
+
+
+    let selectedMarker = null;
+
+
+    /*
+     * Put coordinates into form
+     */
+
+    function setLocation(latitude, longitude) {
+
+        document.getElementById("latitude").value =
+            latitude.toFixed(6);
+
+        document.getElementById("longitude").value =
+            longitude.toFixed(6);
+
+    }
+
+
+    /*
+     * Add / move selected location marker
+     */
+
+    function selectLocation(latitude, longitude) {
+
+        if (selectedMarker) {
+
+            selectedMarker.setLatLng([
+                latitude,
+                longitude
+            ]);
+
+        } else {
+
+            selectedMarker = L.marker(
+                [latitude, longitude],
+                {
+                    draggable: true
+                }
+            ).addTo(map);
+
+            selectedMarker.bindPopup(
+                "📍 Selected garbage location"
+            );
+
+            /*
+             * If marker is dragged,
+             * update coordinates.
+             */
+
+            selectedMarker.on(
+                "dragend",
+                function(event) {
+
+                    const position =
+                        event.target.getLatLng();
+
+                    setLocation(
+                        position.lat,
+                        position.lng
+                    );
+
+                }
+            );
+
+        }
+
+        setLocation(
+            latitude,
+            longitude
+        );
+
+        selectedMarker.openPopup();
+
+    }
+
+
+    /*
+     * Click anywhere on map
+     */
+
+    map.on(
+        "click",
+        function(event) {
+
+            selectLocation(
+                event.latlng.lat,
+                event.latlng.lng
+            );
+
+        }
+    );
+
+
+    /*
+     * Use current location
+     */
+
+    document
+        .getElementById("locateMeBtn")
+        .addEventListener(
+            "click",
+            function() {
+
+                if (!navigator.geolocation) {
+
+                    alert(
+                        "Your browser does not support location."
+                    );
+
+                    return;
+
+                }
+
+
+                navigator.geolocation.getCurrentPosition(
+
+                    function(position) {
+
+                        const latitude =
+                            position.coords.latitude;
+
+                        const longitude =
+                            position.coords.longitude;
+
+
+                        map.setView(
+                            [latitude, longitude],
+                            17
+                        );
+
+
+                        selectLocation(
+                            latitude,
+                            longitude
+                        );
+
+                    },
+
+                    function() {
+
+                        alert(
+                            "Unable to access your location. " +
+                            "Please allow location permission " +
+                            "or select a location manually on the map."
+                        );
+
+                    }
+
+                );
+
+            }
+        );
+
+</script>
 
 {% endblock %}
